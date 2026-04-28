@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  # -----------------------------
+  # FASTAPI AI MICROSERVICE
+  # -----------------------------
+  ai-microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-microservice
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - qdrant
+    restart: always
+    networks:
+      - ai-network
+
+  # -----------------------------
+  # REDIS (Caching + Rate Limit)
+  # -----------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis_data:/data
+    networks:
+      - ai-network
+
+  # -----------------------------
+  # QDRANT (Vector Database)
+  # -----------------------------
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    restart: always
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - ai-network
+
+  # -----------------------------
+  # OPTIONAL: NGINX (Reverse Proxy)
+  # -----------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    depends_on:
+      - ai-microservice
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - ai-network
+
+# -----------------------------
+# NETWORK
+# -----------------------------
+networks:
+  ai-network:
+    driver: bridge
+
+# -----------------------------
+# VOLUMES (PERSISTENCE)
+# -----------------------------
+volumes:
+  redis_data:
+  qdrant_data:

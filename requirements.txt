@@ -1,0 +1,48 @@
+# FASTAPI
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+httpx==0.28.1
+
+# CONFIG
+pydantic==2.9.2
+pydantic-settings==2.3.0
+
+# CORE
+python-multipart==0.0.12
+python-dotenv==1.0.1
+
+# REDIS
+redis==5.0.1
+
+# VECTOR DB
+qdrant-client==1.9.1
+
+# LLM
+openai==1.40.0
+google-genai==1.73.1   # ✅ correct SDK
+
+# TOKENS
+tiktoken==0.7.0
+numpy==1.26.4
+
+# STREAMING
+websockets==13.0
+
+# RESILIENCE
+tenacity==8.3.0
+
+# LOGGING
+python-json-logger==2.0.7
+
+# TESTING
+pytest==8.3.0
+pytest-asyncio==0.23.0
+
+# BACKGROUND
+celery==5.4.0
+
+# METRICS
+prometheus-client==0.20.0
+
+# AUTH
+PyJWT==2.9.0
